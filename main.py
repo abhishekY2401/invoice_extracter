@@ -8,13 +8,17 @@ from PIL import Image
 from dotenv import load_dotenv
 import google.generativeai as genai
 
-load_dotenv()
+# Load environment variables
+if 'st.secrets' in dir(st):  # Production
+    api_key = st.secrets["GOOGLE_API_KEY"]
+else:  # Local development
+    load_dotenv()
+    api_key = os.getenv("GOOGLE_API_KEY")
+    
 # Configure logging
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s')
 
-# Get the API key from the environment
-api_key = os.getenv("GOOGLE_API_KEY")
 if api_key is None:
     logging.error("GOOGLE_API_KEY is not set in the environment variables.")
     st.error(
